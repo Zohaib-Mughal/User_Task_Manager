@@ -1,138 +1,39 @@
 @import "tailwindcss";
-* {
-  font-family: "Poppins", sans-serif;
+
+@layer base {
+  body {
+    font-family: "Poppins", sans-serif;
+    @apply bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-blue-500 selection:text-white;
+  }
+
+  button {
+    @apply cursor-pointer transition-all duration-200 active:scale-95;
+  }
+
+  input, select, textarea {
+    @apply bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all;
+  }
 }
-body {
-  height: 100vh;
-  @apply bg-gradient-to-r from-gray-900 via-sky-900 to-gray-800 min-h-screen;
-}
+
+/* Custom UI Components & Utilities */
 .active {
-  @apply border-b-2 border-blue-500 text-blue-500;
+  @apply text-blue-400 font-semibold relative after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-0.5 after:bg-blue-500 after:rounded-full;
 }
-button {
-  @apply cursor-pointer;
-}
-.aa {
-  margin-left: -2px;
-}
-input {
-  border: 1px solid white;
-  border-radius: 10px;
-  margin: 10px;
-}
+
 .roundBorder {
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px black;
-}
-form {
-  margin: 20px;
+  @apply bg-slate-900/80 backdrop-blur-md border border-slate-800/80 rounded-2xl shadow-xl shadow-black/40;
 }
 
-/* fonts */
-.poppins-thin {
-  font-family: "Poppins", sans-serif;
-  font-weight: 100;
-  font-style: normal;
+/* Clean Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.poppins-extralight {
-  font-family: "Poppins", sans-serif;
-  font-weight: 200;
-  font-style: normal;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.poppins-light {
-  font-family: "Poppins", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.poppins-regular {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.poppins-medium {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
-
-.x {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.poppins-bold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.poppins-extrabold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 800;
-  font-style: normal;
-}
-
-.poppins-black {
-  font-family: "Poppins", sans-serif;
-  font-weight: 900;
-  font-style: normal;
-}
-
-.poppins-thin-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 100;
-  font-style: italic;
-}
-
-.poppins-extralight-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 200;
-  font-style: italic;
-}
-
-.poppins-light-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 300;
-  font-style: italic;
-}
-
-.poppins-regular-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: italic;
-}
-
-.poppins-medium-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-style: italic;
-}
-
-.poppins-semibold-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: italic;
-}
-
-.poppins-bold-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: italic;
-}
-
-.poppins-extrabold-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 800;
-  font-style: italic;
-}
-
-.poppins-black-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 900;
-  font-style: italic;
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-800 rounded-full hover:bg-slate-700;
 }

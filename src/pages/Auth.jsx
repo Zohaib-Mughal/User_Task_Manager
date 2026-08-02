@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { addUser, validateLogin, isLoggedIn } from "../utils/localStorageUtils";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,6 +17,7 @@ function Auth() {
   } = useForm();
 
   const password = watch("password");
+
   useEffect(() => {
     if (isLoggedIn()) {
       navigate("/", { replace: true });
@@ -38,13 +39,11 @@ function Auth() {
     } else if (result === "emailExist") {
       Swal.fire("Error", "Email already exists", "error");
     } else if (result === "success") {
-      Swal.fire("Success", "User registered successfully", "success").then(
-        () => {
-          setIsLogin(true);
-          navigate("/", { replace: true });
-          reset();
-        }
-      );
+      Swal.fire("Success", "User registered successfully", "success").then(() => {
+        setIsLogin(true);
+        navigate("/", { replace: true });
+        reset();
+      });
     }
   };
 
@@ -56,19 +55,23 @@ function Auth() {
 
     if (isValid) {
       localStorage.setItem("loggedInUser", JSON.stringify({ key, password }));
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     } else {
       Swal.fire("Error", "Invalid Username/Email or Password", "error");
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white">
-      <div className="w-full max-w-lg grid grid-cols-1 md:grid-cols-2 gap-8 p-6 bg-gray-800 p-6 rounded-3xl shadow-lg col-span-2 m-10 ">
-        <div className="col-span-2 flex justify-center mb-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950 text-slate-100">
+      <div className="w-full max-w-md bg-slate-900/70 border border-slate-800 rounded-2xl p-8 backdrop-blur-xl shadow-2xl">
+        {/* Toggle Segmented Control */}
+        <div className="flex bg-slate-950 p-1 rounded-xl mb-8 border border-slate-800/80">
           <button
-            className={`px-6 py-2 mx-2 ${
-              isLogin ? "border-blue-900 border-b-3 bg-gray-700" : ""
+            type="button"
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+              isLogin
+                ? "bg-blue-600 text-white shadow-md"
+                : "text-slate-400 hover:text-white"
             }`}
             onClick={() => {
               setIsLogin(true);
@@ -78,30 +81,32 @@ function Auth() {
             Login
           </button>
           <button
-            className={`px-6 py-2 mx-2 ${
-              !isLogin ? "border-blue-900 border-b-3 bg-gray-700" : ""
+            type="button"
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+              !isLogin
+                ? "bg-blue-600 text-white shadow-md"
+                : "text-slate-400 hover:text-white"
             }`}
             onClick={() => {
               setIsLogin(false);
               reset();
             }}
           >
-            Signup
+            Sign Up
           </button>
         </div>
 
         {/* Signup Form */}
         {!isLogin && (
-          <form
-            onSubmit={handleSubmit(handleSignup)}
-            className="bg-gray-800 p-6 rounded-md col-span-2 text-white"
-          >
-            <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+          <form onSubmit={handleSubmit(handleSignup)} className="space-y-4 m-0">
+            <h2 className="text-2xl font-semibold text-white tracking-tight mb-4">
+              Create an account
+            </h2>
 
             <div>
               <input
                 placeholder="Username"
-                className="w-full p-2 mb-1 text-white rounded"
+                className="w-full m-0"
                 {...register("username", {
                   required: "Username is required",
                   minLength: { value: 3, message: "Min 3 characters" },
@@ -113,7 +118,7 @@ function Auth() {
                 })}
               />
               {errors.username && (
-                <p className="text-red-400 text-sm">
+                <p className="text-red-400 text-xs mt-1 ml-1">
                   {errors.username.message}
                 </p>
               )}
@@ -122,7 +127,7 @@ function Auth() {
             <div>
               <input
                 placeholder="Full Name"
-                className="w-full p-2 mb-1 rounded"
+                className="w-full m-0"
                 {...register("fullName", {
                   required: "Full name is required",
                   pattern: {
@@ -132,7 +137,7 @@ function Auth() {
                 })}
               />
               {errors.fullName && (
-                <p className="text-red-400 text-sm">
+                <p className="text-red-400 text-xs mt-1 ml-1">
                   {errors.fullName.message}
                 </p>
               )}
@@ -142,7 +147,7 @@ function Auth() {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full p-2 mb-1 rounded"
+                className="w-full m-0"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -152,23 +157,23 @@ function Auth() {
                 })}
               />
               {errors.email && (
-                <p className="text-red-400 text-sm">{errors.email.message}</p>
+                <p className="text-red-400 text-xs mt-1 ml-1">{errors.email.message}</p>
               )}
             </div>
 
             <div>
               <input
                 type="password"
-                placeholder="Password"
-                className="w-full p-2 mb-1  rounded"
+                placeholder="Password (8 characters)"
+                className="w-full m-0"
                 {...register("password", {
                   required: "Password is required",
-                  minLength: { value: 8, message: "Must be 8 characters" },
-                  maxLength: { value: 8, message: "Must be 8 characters" },
+                  minLength: { value: 8, message: "Must be greater than 4 characters" },
+                  maxLength: { value: 8, message: "Must be less than 8 characters" },
                 })}
               />
               {errors.password && (
-                <p className="text-red-400 text-sm">
+                <p className="text-red-400 text-xs mt-1 ml-1">
                   {errors.password.message}
                 </p>
               )}
@@ -178,7 +183,7 @@ function Auth() {
               <input
                 type="password"
                 placeholder="Confirm Password"
-                className="w-full p-2 mb-1 rounded"
+                className="w-full m-0"
                 {...register("confirmPassword", {
                   required: "Confirm your password",
                   validate: (value) =>
@@ -186,13 +191,16 @@ function Auth() {
                 })}
               />
               {errors.confirmPassword && (
-                <p className="text-red-400 text-sm">
+                <p className="text-red-400 text-xs mt-1 ml-1">
                   {errors.confirmPassword.message}
                 </p>
               )}
             </div>
 
-            <button className="w-full bg-blue-500 hover:bg-blue-600 p-2 mt-4 rounded m-2">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-blue-600/20 active:scale-[0.98] mt-2"
+            >
               Sign Up
             </button>
           </form>
@@ -200,22 +208,21 @@ function Auth() {
 
         {/* Login Form */}
         {isLogin && (
-          <form
-            onSubmit={handleSubmit(handleLogin)}
-            className="bg-gray-800 p-6 rounded col-span-2"
-          >
-            <h2 className="text-2xl font-bold mb-4">Login</h2>
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-4 m-0">
+            <h2 className="text-2xl font-semibold text-white tracking-tight mb-4">
+              Welcome back
+            </h2>
 
             <div>
               <input
                 placeholder="Username or Email"
-                className="w-full p-2 mb-1 rounded"
+                className="w-full m-0"
                 {...register("key", {
                   required: "Field is required",
                 })}
               />
               {errors.key && (
-                <p className="text-red-400 text-sm">{errors.key.message}</p>
+                <p className="text-red-400 text-xs mt-1 ml-1">{errors.key.message}</p>
               )}
             </div>
 
@@ -223,18 +230,21 @@ function Auth() {
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-2 mb-1 rounded"
+                className="w-full m-0"
                 {...register("pass", {
                   required: "Password is required",
                   minLength: { value: 4, message: "Too short" },
                 })}
               />
               {errors.pass && (
-                <p className="text-red-400 text-sm">{errors.pass.message}</p>
+                <p className="text-red-400 text-xs mt-1 ml-1">{errors.pass.message}</p>
               )}
             </div>
 
-            <button className="w-full bg-green-500 m-2 hover:bg-green-600 p-2 mt-4 rounded">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-blue-600/20 active:scale-[0.98] mt-2"
+            >
               Login
             </button>
           </form>

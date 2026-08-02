@@ -34,68 +34,79 @@ export default function Tasks() {
       text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#475569",
+      confirmButtonText: "Yes, delete it",
       cancelButtonText: "Cancel",
+      background: "#0f172a",
+      color: "#f8fafc",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: "Delete success",
-          text: "Redirecting to all tasks",
+          title: "Deleted Successfully",
+          text: "Task has been removed.",
           icon: "success",
-          timer: 2000,
+          timer: 1500,
           showConfirmButton: false,
-          timerProgressBar: true,
+          background: "#0f172a",
+          color: "#f8fafc",
         });
         const updatedTasks = deleteTask(title);
         setTasks(updatedTasks);
       }
     });
   };
+
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-gray-50">Tasks</h1>
+    <div className="max-w-7xl mx-auto p-6 space-y-6">
+      <div className="flex justify-between items-center pb-4 border-b border-slate-800">
+        <div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Tasks</h1>
+          <p className="text-xs text-slate-400 mt-1">
+            Organize and manage your team's assignments
+          </p>
+        </div>
         <button
           onClick={() => {
             setTaskMode("add");
             openDialog();
           }}
-          className="bg-blue-500 text-white py-2 px-4 rounded-2xl hover:bg-blue-600"
+          className="bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-xl transition-all duration-200 shadow-md shadow-blue-600/20 active:scale-95 text-sm"
         >
-          Add Task
+          + Add Task
         </button>
       </div>
 
-      <TableCommon
-        tableData={tasks}
-        const
-        column={[
-          { field: "title", header: "Title" },
-          { field: "description", header: "Description" },
-          { field: "status", header: "Status" },
-          { field: "assignTo", header: "Assign to" },
-          { field: "completionDate", header: "Completion Date" },
-        ]}
-        action={[
-          {
-            header: "Delete",
-            function: (data) => handleDelete(data.title),
-            style: "bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded",
-          },
-          {
-            header: "Edit",
-            function: (data) => {
-              setTaskMode("edit");
-              setIsDialogOpen(true);
-              setSelectedTask(data);
+      <div className="bg-slate-900/60 border border-slate-800 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl p-4">
+        <TableCommon
+          tableData={tasks}
+          column={[
+            { field: "title", header: "Title" },
+            { field: "description", header: "Description" },
+            { field: "status", header: "Status" },
+            { field: "assignTo", header: "Assign To" },
+            { field: "completionDate", header: "Completion Date" },
+          ]}
+          action={[
+            {
+              header: "Edit",
+              function: (data) => {
+                setTaskMode("edit");
+                setIsDialogOpen(true);
+                setSelectedTask(data);
+              },
+              style:
+                "bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium transition-all mr-2",
             },
-            style:
-              "bg-blue-500 m-2 hover:bg-blue-600 text-white px-3 py-1 rounded",
-          },
-        ]}
-      />
+            {
+              header: "Delete",
+              function: (data) => handleDelete(data.title),
+              style:
+                "bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
+            },
+          ]}
+        />
+      </div>
 
       {isDialogOpen && (
         <TaskManagement
